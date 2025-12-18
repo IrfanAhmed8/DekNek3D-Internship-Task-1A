@@ -2,6 +2,18 @@ $Content = @'
 # Node modules
 node_modules/
 
+# Uploaded & generated files
+uploads/
+outputs/
+
+# Blender cache / temp
+*.blend
+*.blend1
+
+# OS junk
+.DS_Store
+Thumbs.db
+
 # Environment variables
 .env
 .env.local
