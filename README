@@ -1,0 +1,83 @@
+DekNek3D Conversion Service
+===========================
+
+A simple backend service for converting uploaded GLB files to other formats (STL, PLY, OBJ) and returning a downloadable file (or ZIP for multi-file outputs).
+
+Prerequisites
+-------------
+- Node.js (v16+ recommended)
+- npm
+
+Quick start
+-----------
+1. Change into the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the server:
+   ```bash
+   npm start
+   ```
+4. Server runs at: `http://localhost:8000` (default port 8000)
+
+Dependencies ✅
+---------------
+These are the packages required by the backend (listed in `backend/package.json`):
+
+- `express` — web framework
+- `multer` — file upload handling
+- `cors` — Cross-Origin Resource Sharing
+- `@gltf-transform/core`, `@gltf-transform/extensions`, `@gltf-transform/functions` — GLTF/GLB manipulation
+- `three` — 3D model utilities
+- `draco3dgltf` — Draco compression support
+- `meshoptimizer` — mesh optimization
+- `archiver` — zip creation
+
+API Routes 🔧
+------------
+1) POST /upload
+- Description: Upload a `.glb` file and request a conversion.
+- Method: POST
+- Content type: multipart/form-data
+- Fields:
+  - `file` — the uploaded GLB file (must have `.glb` extension)
+  - `format` — one of: `glb` (optimize), `stl`, `ply`, `obj`
+- Notes:
+  - Max file size configured to 20 MB.
+  - `ply` and `obj` conversions are returned as a `.zip` (containing one or more files).
+  - Temporary files are stored in `uploads/` and results go to `outputs/` and are removed after download.
+- Success response example:
+  ```json
+  {
+    "success": true,
+    "fileId": "<output-filename>",
+    "downloadUrl": "/download/<output-filename>"
+  }
+  ```
+- Error responses: 400 for unsupported format, 500 for conversion failures.
+
+Example curl (upload & convert to STL):
+
+```bash
+curl -X POST -F "file=@model.glb" -F "format=stl" http://localhost:8000/upload
+```
+
+2) GET /download/:fileId
+- Description: Download a converted file by `fileId` (as returned by `/upload`). The server deletes the file after a successful download.
+- Example:
+
+```bash
+curl -O http://localhost:8000/download/<fileId>
+```
+
+Notes & Tips 💡
+---------------
+- Ensure `uploads/` and `outputs/` are writable by the server process.
+- Consider adding `outputs/`, `uploads/`, and `node_modules/` to `.gitignore` (temporary files and dependencies should not be committed).
+- If you want to change the port or other configuration, add environment variable support and document it here.
+
+If you'd like, I can also add the `.gitignore` entries and a usage example script or Postman collection. Let me know which you'd prefer next.
