@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@gltf-transform/core": "^4.2.1",
+    "@gltf-transform/extensions": "^4.2.1",
+    "@gltf-transform/functions": "^4.2.1",
+    "archiver": "^7.0.1",
+    "cors": "^2.8.5",
+    "draco3dgltf": "^1.5.7",
+    "express": "^5.2.1",
+    "meshoptimizer": "^1.0.1",
+    "multer": "^2.0.2",
+    "three": "^0.182.0"
+  }
+}
