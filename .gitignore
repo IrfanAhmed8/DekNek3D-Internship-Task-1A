@@ -1,6 +1,7 @@
 $Content = @'
 # Node modules
 node_modules/
+.next/
 
 # Uploaded & generated files
 uploads/
