@@ -156,27 +156,46 @@ export default function Page() {
   };
 
   const handleConvert = async () => {
-    if (!file) return;
+  if (!file) return;
 
-    setLoading(true);
-    setError(null);
-    setDone(false);
+  setLoading(true);
+  setError(null);
+  setDone(false);
 
-    await loadGLBFile(
-      file,
-      (scene) => {
-        console.log("Scene ready for conversion:", scene);
-        setTimeout(() => {
-          setLoading(false);
-          setDone(true);
-        }, 1500);
-      },
-      () => {
-        setLoading(false);
-        setError("Failed to load GLB file.");
-      }
-    );
-  };
+  try {
+    const formData = new FormData();
+    formData.append("file", file);     // MUST be "file"
+    formData.append("format", "stl");  // backend expects this
+
+    const res = await fetch("http://localhost:8000/upload", {
+      method: "POST",
+      body: formData,
+      // ❌ DO NOT set headers
+    });
+
+    if (!res.ok) {
+      throw new Error("Upload failed");
+    }
+
+    const data = await res.json();
+    console.log("Backend response:", data);
+
+    if (!data.downloadUrl) {
+      throw new Error("No download URL returned");
+    }
+
+    // Trigger real download from backend
+    window.location.href = `http://localhost:8000${data.downloadUrl}`;
+
+    setDone(true);
+  } catch (err) {
+    console.error(err);
+    setError("Conversion failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleDownload = () => {
     if (!file) return;

@@ -3,6 +3,12 @@ $Content = @'
 node_modules/
 .next/
 
+# Python
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+
 # Uploaded & generated files
 uploads/
 outputs/
